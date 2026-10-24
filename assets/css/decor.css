@@ -1,0 +1,145 @@
+/* ==========================================================================
+   郑翔鸣 · 个人主页 两侧留白装饰层（生产版，无预览开关面板）
+   三套装饰：① 章节导航轨 ② 语义水印 ③ 视差光晕
+   配色按浅色版：金 #C9A962 / 深古铜 #7A5B1F / 纸白 #F8F7F4
+   依赖：section 的 id 与顺序（见 decor.js 顶部 sectionList / wmList 两个数组）
+   --------------------------------------------------------------------------
+   若要用到暗色版 index.html：把 .decor-rail__label 的 #7A5B1F 换成 #E6E8EB、
+   .decor-rail__dot 的 #F8F7F4 换成 #0E1116 即可，金色部分不变。
+   ========================================================================== */
+
+/* 每个 section 成为定位锚点；内容容器盖在装饰之上 */
+main > section { position: relative; }
+main > section .container { position: relative; z-index: 1; }
+/* main 抬到光晕（z-index 0）之上 */
+main { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   ① 章节导航轨（左侧固定，桌面端 ≥1200px）
+   ========================================================================== */
+.decor-rail {
+  position: fixed;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.decor-rail::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(201, 169, 98, 0.30);
+}
+
+.decor-rail__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  text-decoration: none;
+}
+
+.decor-rail__dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: #F8F7F4;
+  border: 1px solid rgba(201, 169, 98, 0.65);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.decor-rail__item:hover .decor-rail__dot { transform: scale(1.35); }
+
+.decor-rail__item.is-active .decor-rail__dot {
+  background: #C9A962;
+  border-color: #C9A962;
+  box-shadow: 0 0 0 4px rgba(201, 169, 98, 0.16);
+}
+
+.decor-rail__label {
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #7A5B1F;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.decor-rail__item:hover .decor-rail__label,
+.decor-rail__item.is-active .decor-rail__label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 窄屏留白不足，隐藏导航轨 */
+@media (max-width: 1199px) {
+  .decor-rail { display: none; }
+}
+
+/* ==========================================================================
+   ② 语义水印（两侧留白，极淡大符号）
+   --------------------------------------------------------------------------
+   透明度想更淡 → 把下方 color 的 0.16 调小（如 0.10）；想更明显 → 调大（≤0.20）
+   ========================================================================== */
+.decor-wm {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(201, 169, 98, 0.16);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.decor-wm--left { left: 5%; }
+.decor-wm--right { right: 5%; }
+.decor-wm--mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.decor-wm--sm { font-size: 64px; }
+.decor-wm--md { font-size: 110px; }
+.decor-wm--lg { font-size: 160px; }
+
+/* 旅行区是浅色对比区，水印改用深古铜更柔和 */
+.section-travel .decor-wm { color: rgba(122, 91, 31, 0.14); }
+
+/* 窄屏隐藏水印，避免压字 */
+@media (max-width: 1023px) {
+  .decor-wm { display: none; }
+}
+
+/* ==========================================================================
+   ③ 视差光晕（固定背景层，随滚动轻微漂移）
+   --------------------------------------------------------------------------
+   光晕强弱 → 改 blob 里 rgba(201,169,98,0.13) 的 0.13；
+   漂移幅度 → 改 decor.js 里的 0.1 系数（越大漂得越明显）
+   ========================================================================== */
+.decor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.decor-glow__blob {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(201, 169, 98, 0.13) 0%, rgba(201, 169, 98, 0) 70%);
+}
+
+.decor-glow__blob--1 { left: -180px; top: 10%; width: 560px; height: 560px; }
+.decor-glow__blob--2 { right: -200px; top: 48%; width: 640px; height: 640px; }
+.decor-glow__blob--3 { left: -140px; top: 84%; width: 500px; height: 500px; }

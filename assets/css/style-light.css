@@ -1,0 +1,120 @@
+@import url("style.css");
+
+/* ==========================================================================
+   独立明亮（Light）预览覆盖层
+   仅覆盖 :root 变量 + 少量硬编码暗表面；原暗色 style.css 零改动。
+   设计基调：「暖编辑感浅色」——暖中性柔白纸底 #F8F7F4 + 深石板字 #1E242B
+   + 品牌金 #C9A962 作描边/圆点/分隔，所有金色彩文本改用新增 --gold-deep #7A5B1F。
+   ========================================================================== */
+
+:root {
+  /* ===== 浅色中性阶（主区）===== */
+  --bg-page: #F8F7F4;
+  --bg-card: #FFFFFF;
+  --border: #E6E3DC;
+  --border-strong: #D6D1C5;
+  --text-primary: #1E242B;
+  --text-secondary: #59636E;
+  --text-muted: #8A929C;   /* 仅装饰/大字号，禁用为正常小字 */
+
+  /* ===== 点缀色 · 金属金（保留品牌金）===== */
+  --gold: #C9A962;
+  --gold-light: #D4B676;
+  --gold-dark: #B89448;
+  --gold-deep: #7A5B1F;    /* 新增：浅底可读的深古铜金，用于金色彩文本 */
+
+  /* ===== 语义色（light 版，全部满足 WCAG AA）===== */
+  --color-success: #15803D;
+  --color-success-bg: rgba(22, 101, 52, 0.12);
+  --color-warning: #B45309;
+  --color-warning-bg: rgba(180, 83, 9, 0.12);
+  --color-danger: #B91C1C;
+  --color-danger-bg: rgba(185, 28, 28, 0.10);
+  --color-info: #7A5B1F;   /* 金信息=深古铜，= --gold-deep */
+  --color-info-bg: rgba(122, 91, 31, 0.12);
+
+  /* ===== 功能底色（浅色毛玻璃导航）===== */
+  --bg-nav: rgba(255, 255, 255, 0.8);
+
+  /* ===== 阴影（浅色：低透明中性深蓝灰微影，避免暖白底显脏）===== */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.10);
+  --shadow-travel: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* ==========================================================================
+   组件级覆盖（仅靠变量不够，需显式规则）
+   ========================================================================== */
+
+/* 按钮 */
+.btn-primary,
+.tag-solid,
+.nav-cta { color: #1E242B; }      /* 金底深字 */
+.btn-secondary:hover { color: var(--gold-deep); border-color: var(--gold-deep); }
+.btn-secondary:active { color: var(--gold-deep); }
+.btn:disabled { background: var(--border); color: var(--text-muted); }
+
+/* 导航 */
+.nav-logo { color: var(--gold-deep); }
+.nav-link.active { color: var(--gold-deep); }
+.nav-link.nav-cta { color: #1E242B; }      /* 金底深字 */
+.nav-link.nav-cta:hover,
+.nav-link.nav-cta.active { color: #1E242B; }
+/* .nav-link.active::after 的浅金 pill（rgba(201,169,98,0.14)）保持不动 */
+
+/* 标签 */
+.tag-solid { background: var(--gold); color: #1E242B; }
+.tag-outline { border-color: var(--border); color: var(--text-secondary); }
+
+/* 卡片 / 表面：背景 var(--bg-card)=#FFF、边框 var(--border)，变量覆盖后自动生效 */
+.strength-card--featured { border: 1px solid var(--gold); }   /* 金边保留 */
+.strength-card--featured::before { background: var(--gold); } /* 金点保留 */
+
+/* 时间线 */
+.timeline-item::before {
+  background: var(--gold);
+  box-shadow: 0 0 0 3px var(--bg-page), 0 0 0 4px var(--border);
+}
+.timeline-time { color: var(--gold-deep); }   /* 13px 小金字 → 深古铜 */
+.timeline::before { background: var(--border); }
+
+/* Hero 数据 / 数字卡 */
+.hero-stat-num { color: var(--gold-deep); }
+.hero-name { color: var(--gold); }   /* 装饰性超大楷体字，保留金；严格可改 --gold-deep */
+
+/* 竞争力 / 数据卡数字 */
+.strength-num,
+.pace-value { color: var(--gold-deep); }
+
+/* 作品代码块 */
+.work-cover { background: #F3F1EC; border-color: var(--border); }  /* 原 var(--bg-page) 浅底变黑灰，改为浅代码底 */
+.cover-tag { color: var(--gold-deep); }
+.cover-line,
+.cover-attr,
+.cover-val { color: var(--text-secondary); }
+
+/* 区块分隔 / 交替底色 */
+main > section:nth-of-type(even):not(.section-travel) {
+  background: rgba(0, 0, 0, 0.02);   /* 原 rgba(255,255,255,0.012) 浅底无效，改为极淡暗影 */
+}
+main > section:not(#hero) {
+  border-top: 1px solid rgba(201, 169, 98, 0.10); /* 浅金细线保留 */
+}
+
+/* 页面网格纹理（body）：暗态白线 → 极淡深蓝灰网格 */
+body {
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(rgba(30, 41, 59, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* 兴趣卡图标底：暗渐变 → 浅暖渐变 */
+.hobby-thumb--icon {
+  background: linear-gradient(135deg, #F2EEE6 0%, #E7E0D2 100%);
+  color: var(--gold);   /* 金图标在浅暖底上清晰 */
+}
+
+/* Lightbox 遮罩：作为模态聚焦遮罩保留深色（rgba(0,0,0,0.8)），内容底 #fff 不动 */
